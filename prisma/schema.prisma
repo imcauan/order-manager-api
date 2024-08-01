@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  password  String
+  role      Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  orders    Orders[]
+}
+
+model Orders {
+  id        String   @id @default(uuid())
+  status    Int      @default(1)
+  user_id   String
+  user      Users    @relation(fields: [user_id], references: [id])
+  table_id  String
+  table     Tables   @relation(fields: [table_id], references: [id])
+  meals     Meals[]  @relation("mealsOrder")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Categories {
+  id    String  @id @default(uuid())
+  name  String
+  meals Meals[]
+}
+
+model Meals {
+  id          String     @id @default(uuid())
+  name        String
+  image       String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  orders      Orders[]   @relation("mealsOrder")
+  category_id String
+  category    Categories @relation(fields: [category_id], references: [id])
+}
+
+model Tables {
+  id        String   @id @default(uuid())
+  number    Int
+  orders    Orders[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
