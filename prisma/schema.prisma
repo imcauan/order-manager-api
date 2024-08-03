@@ -19,6 +19,7 @@ model Users {
   email     String
   password  String
   role      Int      @default(1)
+  image     String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   orders    Orders[]
@@ -31,7 +32,7 @@ model Orders {
   user      Users    @relation(fields: [user_id], references: [id])
   table_id  String
   table     Tables   @relation(fields: [table_id], references: [id])
-  meals     Meals[]  @relation("mealsOrder")
+  meals     Meals[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -46,9 +47,10 @@ model Meals {
   id          String     @id @default(uuid())
   name        String
   image       String
+  price       Decimal    @db.Decimal(12, 2)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  orders      Orders[]   @relation("mealsOrder")
+  orders      Orders[]
   category_id String
   category    Categories @relation(fields: [category_id], references: [id])
 }
