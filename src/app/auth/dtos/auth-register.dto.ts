@@ -1,6 +1,6 @@
 import { IsEmail, IsEnum, IsOptional, IsString } from "class-validator";
 import { AuthLoginDto } from "./auth-login.dto";
-import { Role } from "src/app/enums/role.enum";
+import { Role } from "src/app/user/enums/role.enum";
 
 export class AuthRegisterDto extends AuthLoginDto {
     
