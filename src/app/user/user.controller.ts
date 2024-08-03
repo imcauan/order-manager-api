@@ -1,12 +1,11 @@
-import { Body, Controller, Delete, Get, Patch, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Patch, Post, UseGuards } from "@nestjs/common";
 import { CreateUserDto } from "./dtos/create-user.dto";
-import { UpdatePutUserDto } from "./dtos/update-put-user.dto";
-import { UpdatePatchUserDto } from "./dtos/update-patch-user.dto";
+import { UpdateUserDto } from "./dtos/update-user.dto";
 import { UserService } from "./user.service";
 import { ParamId } from "src/decorators/param-id.decorator";
 import { AuthGuard } from "src/guards/auth.guard";
 import { Roles } from "src/decorators/roles.decorator";
-import { Role } from "../enums/role.enum";
+import { Role } from "./enums/role.enum";
 import { RoleGuard } from "src/guards/role.guard";
 ''
 @Roles(Role.Admin)
@@ -31,14 +30,9 @@ export class UserController {
         return this.userService.getById(id)
     }
 
-    @Put(":id")
-    async update(@Body() data: UpdatePutUserDto, @ParamId() id: string) {
-        return this.userService.update(id, data)
-    }
-
     @Patch(":id")
-    async updatePartial(@Body() data: UpdatePatchUserDto, @ParamId() id: string) {
-        return this.userService.updatePartial(id, data)
+    async update(@Body() data: UpdateUserDto, @ParamId() id: string) {
+        return this.userService.update(id, data)
     }
 
     @Delete(":id")

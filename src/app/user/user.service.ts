@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dtos/create-user.dto';
-import { PrismaClient } from '@prisma/client';
 import { CryptoService } from 'src/infra/crypto/Crypto.service';
-import { UpdatePutUserDto } from './dtos/update-put-user.dto';
-import { UpdatePatchUserDto } from './dtos/update-patch-user.dto';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
+import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -33,16 +31,7 @@ export class UserService {
     return this.prismaClient.users.findUnique({ where: { id }});
   }
 
-  async update(id: string, data: UpdatePutUserDto) {
-    return this.prismaClient.users.update({
-      data,
-      where: {
-        id
-      }
-    })
-  }
-
-  async updatePartial(id: string, data: UpdatePatchUserDto) {
+  async update(id: string, data: UpdateUserDto) {
     return this.prismaClient.users.update({
       data,
       where: {
