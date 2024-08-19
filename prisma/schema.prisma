@@ -26,20 +26,23 @@ model Users {
 }
 
 model Orders {
-  id        String   @id @default(uuid())
-  status    Int      @default(1)
-  user_id   String
-  user      Users    @relation(fields: [user_id], references: [id])
-  table_id  String
-  table     Tables   @relation(fields: [table_id], references: [id])
-  meals     Meals[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id @default(uuid())
+  status      Int      @default(1)
+  author_name String
+  user_id     String
+  user        Users    @relation(fields: [user_id], references: [id])
+  table_id    String
+  table       Tables   @relation(fields: [table_id], references: [id])
+  meals       Meals[]
+  total       Decimal  @db.Decimal(12, 2)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 model Categories {
   id    String  @id @default(uuid())
   name  String
+  image String?
   meals Meals[]
 }
 
