@@ -53,7 +53,7 @@ export class AuthService {
     };
   }
 
-  async login(@Body() data: AuthLoginDto) {
+  async login(data: AuthLoginDto) {
     const user = await this.PrismaClient.users.findFirst({
       where: { email: data.email },
     });

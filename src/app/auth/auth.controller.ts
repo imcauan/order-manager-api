@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -37,11 +38,8 @@ export class AuthController {
   // }
 
   @UseGuards(AuthGuard)
-  @Post('me')
+  @Get('me')
   async me(@User() user) {
-    return {
-      me: 'ok',
-      user,
-    };
+    return user
   }
 }
