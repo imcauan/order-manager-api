@@ -1,32 +1,46 @@
-import { Body, Controller } from "@nestjs/common";
-import { CreateOrderDto } from "./dtos/create-order.dto";
-import { OrderService } from "./order.service";
-import { ParamId } from "src/decorators/param-id.decorator";
-import { UpdateOrderDto } from "./dtos/update-order.dto";
+import { Body, Controller, Delete, Get, Patch, Post } from '@nestjs/common';
+import { CreateOrderDto } from './dtos/create-order.dto';
+import { OrderService } from './order.service';
+import { ParamId } from 'src/decorators/param-id.decorator';
+import { UpdateOrderDto } from './dtos/update-order.dto';
 
-@Controller("orders")
+@Controller('orders')
 export class OrderController {
-    constructor(
-        private readonly orderService: OrderService
-    ) {}
+  constructor(private readonly orderService: OrderService) {}
 
-    async create(@Body() data: CreateOrderDto) {
-        return this.orderService.create(data);
-    }
+  @Post()
+  async create(@Body() data: CreateOrderDto) {
+    return this.orderService.create(data);
+  }
 
-    async list() {
-        return this.orderService.list();
-    }
+  @Get()
+  async list() {
+    return this.orderService.list();
+  }
 
-    async getById(@ParamId() id: string) {
-        return this.orderService.getById(id);
-    }
+  @Get('/chart')
+  async getOrderChart() {
+    return this.orderService.getChartData();
+  }
 
-    async update(@ParamId() id: string, data: UpdateOrderDto) {
-        return this.orderService.update(id, data);
-    }
+  @Get('/revenue')
+  async getRevenueChart() {
+    return this.orderService.getRevenueChartData();
+  }
 
-    async delete(@ParamId() id: string) {
-        return this.orderService.delete(id);
-    }
-} 
+  @Get(':id')
+  async getById(@ParamId() id: string) {
+    return this.orderService.getById(id);
+  }
+
+  @Patch(':id')
+  async update(@ParamId() id: string, @Body() data: UpdateOrderDto) {
+    console.log({ id, data });
+    return this.orderService.update(id, data);
+  }
+
+  @Delete(':id')
+  async delete(@ParamId() id: string) {
+    return this.orderService.delete(id);
+  }
+}
