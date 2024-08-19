@@ -28,23 +28,40 @@ export class UserService {
   }
 
   async getById(id: string) {
-    return this.prismaClient.users.findUnique({ where: { id }});
+    return this.prismaClient.users.findUnique({ where: { id } });
   }
 
-  async update(id: string, data: UpdateUserDto) {
+  async update(id: string, data: UpdateUserDto, image: Express.Multer.File) {
     return this.prismaClient.users.update({
-      data,
+      data: {
+        email: data.email,
+        name: data.name,
+        image: image.filename,
+      },
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
   }
 
   async delete(id: string) {
     return this.prismaClient.users.delete({
       where: {
-        id
-      }
-    })
+        id,
+      },
+    });
+  }
+
+  async getUsersRank() {
+    return this.prismaClient.users.findMany({
+      orderBy: {
+        orders: {
+          _count: 'desc',
+        },
+      },
+      include: {
+        orders: true,
+      },
+    });
   }
 }
