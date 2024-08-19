@@ -1,6 +1,6 @@
-import { IsJWT } from "class-validator";
+import { IsJWT } from 'class-validator';
 
 export class AuthMeDto {
-    @IsJWT()
-    token: string
+  @IsJWT()
+  token: string;
 }

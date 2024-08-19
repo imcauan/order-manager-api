@@ -1,4 +1,4 @@
-import { IsDecimal, IsEnum, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 import { Meals } from '@prisma/client';
 
 export class CreateOrderDto {

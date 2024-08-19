@@ -3,14 +3,11 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UploadedFile,
-  UseInterceptors,
 } from '@nestjs/common';
 import { PrismaService } from 'src/infra/prisma/prisma.service';
 import { CreateMealDto } from './dtos/create-meal.dto';
 import { FileService } from '../file/file.service';
 import { UpdateMealDto } from './dtos/update-meal.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Injectable()
 export class MealsService {

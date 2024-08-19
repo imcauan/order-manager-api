@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  Body,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -20,7 +19,7 @@ export class AuthService {
     private readonly CryptoService: CryptoService,
   ) {}
 
-  async register(@Body() data: AuthRegisterDto) {
+  async register(data: AuthRegisterDto) {
     const userByEmail = await this.PrismaClient.users.findFirst({
       where: { email: data.email },
     });
@@ -43,13 +42,13 @@ export class AuthService {
     const token = await this.JWTService.sign<AuthPayloadDto>(
       {
         id: user.id,
-        role: user.role
+        role: user.role,
       },
       '1h',
     );
 
     return {
-      token: token
+      token: token,
     };
   }
 
@@ -74,13 +73,13 @@ export class AuthService {
     const token = await this.JWTService.sign<AuthPayloadDto>(
       {
         id: user.id,
-        role: user.role
+        role: user.role,
       },
       '1h',
     );
 
     return {
-      token: token
+      token: token,
     };
   }
 

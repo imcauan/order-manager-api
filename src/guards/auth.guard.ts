@@ -1,31 +1,30 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
-import { Observable } from "rxjs";
-import { AuthService } from "src/app/auth/auth.service";
-import { UserService } from "src/app/user/user.service";
+import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { AuthService } from 'src/app/auth/auth.service';
+import { UserService } from 'src/app/user/user.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService,
+  ) {}
 
-    constructor(
-        private readonly authService: AuthService,
-        private readonly userService: UserService
-    ) {}
+  async canActivate(context: ExecutionContext) {
+    const request = context.switchToHttp().getRequest();
+    const { authorization } = request.headers;
 
-    async canActivate(context: ExecutionContext) {
-        const request = context.switchToHttp().getRequest();
-        const { authorization } = request.headers;
+    try {
+      const data = await this.authService.checkToken(
+        (authorization ?? '').split(' ')[1],
+      );
 
-        try {
-            const data = await this.authService.checkToken((authorization ?? "").split(' ')[1]);
+      request.tokenPayload = data;
 
-            request.tokenPayload = data;
-            
-            request.user = await this.userService.getById(data.id);
+      request.user = await this.userService.getById(data.id);
 
-            return true;
-        } catch (e) {
-            return false;
-        }
-
+      return true;
+    } catch (e) {
+      return false;
     }
+  }
 }

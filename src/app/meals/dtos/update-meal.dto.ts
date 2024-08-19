@@ -1,13 +1,12 @@
-import { IsNumber, IsString } from "class-validator";
-import { CreateMealDto } from "./create-meal.dto";
+import { IsNumber, IsString } from 'class-validator';
 
 export class UpdateMealDto {
-    @IsString()
-    name: string;
+  @IsString()
+  name: string;
 
-    @IsNumber()
-    price: number;
+  @IsNumber()
+  price: number;
 
-    @IsString()
-    category_id: string;
+  @IsString()
+  category_id: string;
 }

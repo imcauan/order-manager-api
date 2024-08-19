@@ -1,14 +1,14 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNumber, IsString } from 'class-validator';
 
 export class CreateMealDto {
-    @IsString()
-    name: string;
+  @IsString()
+  name: string;
 
-    image: Express.Multer.File;
+  image: Express.Multer.File;
 
-    @IsNumber()
-    price: number;
+  @IsNumber()
+  price: number;
 
-    @IsString()
-    category_id: string;
+  @IsString()
+  category_id: string;
 }
