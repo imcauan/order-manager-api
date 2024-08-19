@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Patch,
   Post,
@@ -29,9 +30,9 @@ export class MealsController {
   @UseInterceptors(
     FileInterceptor('image', {
       storage: diskStorage({
-        destination: './storage/photos',
+        destination: './storage',
         filename(req, file, callback) {
-          callback(null, `${Date.now()}-${file.originalname}`);
+          callback(null, `${file.originalname}`);
         },
       }),
     }),
@@ -48,16 +49,36 @@ export class MealsController {
     return this.mealsService.list();
   }
 
-  @Get(":id")
+  @Get('/rank')
+  async getRank() {
+    return this.mealsService.getMealsRank();
+  }
+
+  @Get(':id')
   async getById(@ParamId() id: string) {
     return this.mealsService.getById(id);
   }
 
-  @Patch()
-  async update(@ParamId() id: string, data: UpdateMealDto) {
-    return this.mealsService.update(id, data)
+  @UseInterceptors(
+    FileInterceptor('image', {
+      storage: diskStorage({
+        destination: './storage',
+        filename(req, file, callback) {
+          callback(null, `${file.originalname}`);
+        },
+      }),
+    }),
+  )
+  @Patch(':id')
+  async update(
+    @ParamId() id: string,
+    @UploadedFile() image: Express.Multer.File,
+    @Body() data: UpdateMealDto,
+  ) {
+    return this.mealsService.update(id, image, data);
   }
 
+  @Delete('/:id')
   async delete(@ParamId() id: string) {
     return this.mealsService.delete(id);
   }
