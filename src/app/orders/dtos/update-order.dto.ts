@@ -1,4 +1,5 @@
+import { OrderStatus } from '../enums/order-status.enum';
+
 export class UpdateOrderDto {
-    id: string;
-    status: number
+  status: OrderStatus;
 }

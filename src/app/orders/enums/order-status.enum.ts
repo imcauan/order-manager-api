@@ -1,5 +1,5 @@
 export enum OrderStatus {
-    ORDERED = 1,
-    ON_PROGRESS = 2,
-    MADE = 3
+  CANCELED = 0,
+  ORDERED = 1,
+  MADE = 2,
 }
