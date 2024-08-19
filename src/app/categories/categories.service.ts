@@ -9,7 +9,7 @@ export class CategoriesService {
         private readonly prismaService: PrismaService
     ) {}
 
-    async create(data: CreateCategoryDto) {
+    async create(image: Express.Multer.File, data: CreateCategoryDto) {
         const findByName = await this.prismaService.categories.findFirst({ where: { name: data.name }});
 
         if(findByName) {
@@ -18,7 +18,10 @@ export class CategoriesService {
 
         try {
             const category = await this.prismaService.categories.create({
-                data
+                data: {
+                    name: data.name,
+                    image: image.filename
+                }
             });
 
             return { 
@@ -33,7 +36,7 @@ export class CategoriesService {
 
     async getById(id: string) {
         try {
-          const category = await this.prismaService.categories.findUnique({ where: { id }});
+          const category = await this.prismaService.categories.findUnique({ where: { id }, include: { meals: true }});
   
           if(!category) {
               throw new NotFoundException("Category not found.");

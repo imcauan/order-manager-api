@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Patch, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from "@nestjs/common";
 import { CreateCategoryDto } from "./dtos/create-category.dto";
 import { CategoriesService } from "./categories.service";
 import { ParamId } from "src/decorators/param-id.decorator";
@@ -7,6 +7,8 @@ import { AuthGuard } from "src/guards/auth.guard";
 import { Roles } from "src/decorators/roles.decorator";
 import { Role } from "src/app/user/enums/role.enum";
 import { RoleGuard } from "src/guards/role.guard";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { diskStorage } from "multer";
 
 @UseGuards(AuthGuard, RoleGuard)
 @Roles(Role.Admin)
@@ -17,9 +19,19 @@ export class CategoriesController {
         private readonly categoriesService: CategoriesService
     ) {} 
 
+    @UseInterceptors(
+        FileInterceptor('image', {
+          storage: diskStorage({
+            destination: './storage',
+            filename(req, file, callback) {
+              callback(null, `${file.originalname}`);
+            },
+          }),
+        }),
+      )
     @Post()
-    async create(@Body() data: CreateCategoryDto) {
-        return this.categoriesService.create(data)
+    async create(@UploadedFile() image: Express.Multer.File, @Body() data: CreateCategoryDto) {
+        return this.categoriesService.create(image, data)
     }
 
     @Get(":id")
@@ -37,7 +49,7 @@ export class CategoriesController {
         return this.categoriesService.update(id, data);
     }
 
-    @Delete()
+    @Delete("/:id")
     async delete(@ParamId() id: string) {
         return this.categoriesService.delete(id);
     }
